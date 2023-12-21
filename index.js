@@ -51,6 +51,7 @@ switch(action.type){
             return {
                 ...state,
                 numOfIceCreams:state.numOfIceCreams + action.payload
+                
             }
         default:
             return state
