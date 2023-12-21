@@ -1,6 +1,8 @@
 const redux =require('redux')
 const createStore = redux.createStore
 const bindActionCreators = redux.bindActionCreators
+const combineReducers = redux.combineReducers
+
 const CAKE_ORDERED ='CAKE_ORDERERED'
 const ICECREAM_ORDERED = 'ICECREAM_ORDERED'
 const ICECREAM_RESTOCKED = 'ICECREAM_RESTOCKED'
@@ -25,41 +27,54 @@ function restockIceCream(qty=1) {
     }
 }
 
-const initialState ={
-numOfCakes:10,
-numOfIceCreams:20,
+// const initialState ={
+// numOfCakes:10,
+// numOfIceCreams:20,
+// }
+const initialCakeState ={
+    numOfCakes:10,
 }
 
+const initialIceCreamState ={
+    numOfIceCreams:20,
+}
 //(previousState,action) => newState
 
-const reducer = (state = initialState,action) =>{
+const cakereducer = (state = initialCakeState,action) =>{
 switch(action.type){
     case CAKE_ORDERED:
         return {
             ...state,
             numOfCakes:state.numOfCakes -1,
         }
-       
-    
-    case ICECREAM_ORDERED:
-        return {
-            ...state,
-            numOfIceCreams:state.numOfIceCreams + action.payload
-        }
-
-    case ICECREAM_RESTOCKED:
-            return {
-                ...state,
-                numOfIceCreams:state.numOfIceCreams + action.payload
-                
-            }
         default:
             return state
     }
 }
-const store = createStore(reducer)
+const iceCreamreducer = (state = initialIceCreamState,action) =>{
+    switch(action.type){
+        case ICECREAM_ORDERED:
+            return {
+                ...state,
+                numOfIceCreams:state.numOfIceCreams + action.payload,
+            }
+    
+        case ICECREAM_RESTOCKED:
+                return {
+                    ...state,
+                    numOfIceCreams:state.numOfIceCreams + action.payload,
+                    
+                }
+            default:
+                return state
+        }
+    }
+const rootReducer  = combineReducers({
+    cake:cakeReducer,
+    iceCream:iceCreamReducer,
 
-
+})
+const store = createStore(rootReducer)
 console.log('Initial state',store.getState())
 
  const unsubscribe = store.subscribe(()=>
